@@ -48,7 +48,7 @@ const IncidentType = ({ onAddIncidentType }) => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="addedBy" className="added-by-label">Added By</label>
+          <label htmlFor="addedBy" className="added-by-label">Added By:</label>
           <input
             type="text"
             id="addedBy"

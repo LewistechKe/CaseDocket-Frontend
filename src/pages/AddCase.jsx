@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../styles/addcase.css";
 import { useNavigate } from "react-router-dom";
 import { apiDomain } from "../utils/APIUtils";
@@ -13,17 +12,22 @@ const AddCase = () => {
     actionTaken: "",
     status: "open",
   });
-const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${apiDomain}/Cases/addCase`,
-        caseData
-      );
-      window.alert("Case added successfully:", response.data);
-      console.log("Case added successfully:", response.data);
+      const response = await fetch(`${apiDomain}/Cases/addCase`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(caseData),
+      });
+      const data = await response.json();
+      window.alert("Case added successfully:", data);
+      console.log("Case added successfully:", data);
 
       // Reset form fields
       setCaseData({
@@ -48,14 +52,15 @@ const navigate = useNavigate()
 
   const fetchNextCaseNumber = async () => {
     try {
-      const response = await axios.get(`${apiDomain}/nextCaseNumber`);
-      const nextCaseNumber = response.data.nextCaseNumber;
+      const response = await fetch(`${apiDomain}/nextCaseNumber`);
+      const data = await response.json();
+      const nextCaseNumber = data.nextCaseNumber;
       console.log(nextCaseNumber);
       // Update the caseNumber input field placeholder
       const caseNumberInput = document.getElementById("caseNumber");
       caseNumberInput.placeholder = nextCaseNumber;
 
-      //You can also set the caseNumber directly in the state if needed
+      // You can also set the caseNumber directly in the state if needed
       setCaseData({
         ...caseData,
         caseNumber: nextCaseNumber,
@@ -70,12 +75,12 @@ const navigate = useNavigate()
   }, []);
 
   const handleViewAllCases = async () => {
-	try {
-		navigate("/view-cases")
-	} catch (error) {
-		console.error("Error:", error);
-	}
-};
+    try {
+      navigate("/view-cases");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="addcase-container">

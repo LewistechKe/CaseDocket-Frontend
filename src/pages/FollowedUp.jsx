@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import '../styles/followedup.css';
 import { useNavigate } from "react-router-dom";
 
@@ -26,8 +25,14 @@ const FollowedUp = () => {
 
     try {
       // Send a POST request to the server with the follow-up data
-      await axios.post(`${apiDomain}/followups`, newFollowup);
-	  window.alert("Follow-up added successfully");
+      await fetch(`${apiDomain}/followups`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newFollowup),
+      });
+      window.alert("Follow-up added successfully");
       console.log("Follow-up added successfully");
 
       // Reset the form fields after successful submission
@@ -104,7 +109,7 @@ const FollowedUp = () => {
           </select>
         </div>
         <div className="button-group">
-        <button type="submit">Add Follow-up</button>
+          <button type="submit">Add Follow-up</button>
           <button type="button" onClick={handleViewAllFollowups}>
             All Followups
           </button>
